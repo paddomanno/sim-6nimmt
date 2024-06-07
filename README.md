@@ -1,82 +1,86 @@
-### 1. Understand the Game Rules
+# Simulating a Card Game: 6 nimmt
 
-Before diving into coding, ensure you have a solid understanding of the game rules of "6 nimmt". This will be crucial for accurately simulating the game and developing strategies.
+## Project Overview
 
-### 2. Define Objectives
+This project focuses on simulating and analyzing the performance of different strategies in a game environment. The primary goals are to:
 
-Clearly outline your goals:
+1. Develop various game-playing strategies.
+2. Simulate games using these strategies.
+3. Analyze the results to determine the effectiveness of each strategy.
+4. Visualize the outcomes to gain insights and analyze the performance of each strategy in various playing environments, such as:
+   - Determine how the number of players affects strategy effectiveness.
+   - Examine how opponents' strategies influence one's own strategy.
 
-- Identify different strategies.
-- Analyze the performance of each strategy in various playing environments.
-- Determine how the number of players affects strategy effectiveness.
-- Examine how opponents' strategies influence one's own strategy.
+## Project Structure
 
-### 3. Design the Simulation Framework
+The project is organized as follows:
 
-#### 3.1 Game Setup
+- **Strategy Functions:** Implementation of different strategies.
+- **Simulation Function:** Conducts the simulation of games based on the provided strategies.
+- **Analysis Function:** Analyzes the results of the simulations.
+- **Visualization:** Generates visual representations of the results to aid in analysis.
+
+## Simulation Framework
+
+### Game Setup
 
 - **Players**: Each game can have between 2 to 10 players.
-- **Deck**: Consists of 104 cards numbered 1 to 104.
-- **Initial Setup**: Each player is dealt 10 cards, and four cards are placed face-up to start four rows.
+- **Deck**: Consists of 104 cards numbered 1 to 104. Each card has a number of penalty points associated with it.
 
-#### 3.2 Game Flow
+### Game Flow
 
-- **Round**: Players simultaneously select a card to play.
+- **Round Setup**: Each player is dealt 10 cards, and four cards are placed face-up to start four rows.
+- **Round Steps**: Each round consists of 10 steps, one for each card in the players' hands. At the start of each step, players simultaneously select a card to play.
 - **Card Placement**: Cards are placed in rows according to game rules.
 - **Penalties**: Players collect cards if they have to place the sixth card in a row.
 
-#### 3.3 Ending the Game
+### Ending a Game
 
-- The game ends after 10 rounds. The player with the fewest penalty points wins.
+- A game ends after at least one player collects 66 or more penalty points, no matter how many rounds are played. The player with the fewest penalty points wins.
 
-### 4. Develop Strategies
+## Strategies Implemented
 
-Identify and implement various strategies that players might use. Examples include:
+1. **Random Strategy:** Players make random moves.
+2. **Highest First Strategy:** Players prioritize the highest available moves.
+3. **Lowest First Strategy:** Players prioritize the lowest available moves.
+4. **Midrange Strategy:** Players aim for moves that are neither the highest nor the lowest, but in the middle range.
 
-- **Random**: Play a random card.
-- **Lowest First**: Play the lowest available card.
-- **Highest First**: Play the highest available card.
-- **Midrange**: Play a card that minimizes the difference with the last card in a row.
-- **Avoid Penalty**: Play a card that minimizes the risk of collecting cards.
+## Analysis and Metrics
 
-### 5. Implement the Simulation
+The analysis function examines the results of the simulations to provide insights into the effectiveness of each strategy. Key metrics analyzed include:
 
-Use Python to create the game simulation. Consider using libraries like NumPy for efficient computations and Matplotlib for visualization.
+- **Win Rate:** The percentage of games won by each strategy.
+- **Average Score:** The average score achieved by players using each strategy.
 
-#### 5.1 Data Structures
+## Insights Gained
 
-- **Player Class**: Represent each player and their strategy.
-- **Game Class**: Manage the game state and flow.
+The analyses and visualizations provided the following insights:
 
-#### 5.2 Simulation Loop
+1. **Success of "Highest First" Strategy:**
 
-1. Initialize players and deck.
-2. Deal cards and place initial four cards.
-3. For each round:
-   - Players choose cards based on their strategy.
-   - Place cards in rows according to rules.
-   - Calculate penalties.
-4. Record results after 10 rounds.
-5. Repeat for a large number of games to gather data.
+   - **Win Rates:** The "Highest First" strategy emerged as the most successful strategy among those tested. In a 3-player scenario, it wins approximately 2 out of 3 games. Even in a 4-player scenario, it maintains a win rate of over 50%.
+   - **Effect of More Players:** Increasing the number of players (e.g., to 5 or 6) distributes the win rates more evenly among strategies due to the higher number of participants. However, "Highest First" remains the most successful strategy overall.
 
-### 6. Analyze Results
+2. **Average Penalty Points per Step:**
 
-Once the simulation is complete, analyze the data to gain insights into strategy performance.
+   - **"Highest First" Performance:** On average, the "Highest First" strategy consistently accrues lower penalty points compared to other strategies throughout the course of a round. Notably, after the first step, it starts off with significantly fewer penalty points. Although it collects penalty points more rapidly up to the fourth step, its penalty accumulation rate slows down thereafter. This trend becomes more pronounced with an increasing number of players.
+   - **"Lowest First" Performance:** This strategy begins with the highest penalty points after the first step and in the first half of the round it collects penalty points more slowly than any other strategy. After that though, it accelerates its penalty point accumulation towards the end of the round. Despite occasionally outperforming "Midrange" and "Random" strategies during mid-round, it collects too many penalty points in the last three steps, causing it to consistently lose in this combination of strategies.
+   - **"Random" Strategy:** This strategy exhibits a more or less linear penalty point accumulation curve.
+   - **"Midrange" Strategy:** While it effectively avoids penalty points at the start of many rounds, after the first three steps, it accumulates penalty points as quickly as the "Random" strategy, resulting in performance that is roughly equivalent to the "Random" strategy.
 
-#### 6.1 Metrics
+3. **Performance Against Different Strategy Mixes:**
 
-- **Average Penalty Points**: Measure the effectiveness of each strategy.
-- **Win Rate**: Calculate how often each strategy wins.
-- **Effect of Number of Players**: Compare strategy performance across different numbers of players.
-- **Influence of Opponents' Strategies**: Analyze how the mix of opponents' strategies affects a given strategy.
+   - **Focus on "Highest First":** Given its superior performance in previous tests, the analysis focused on how "Highest First" fares against different strategy combinations. In all scenarios, there were four total players, with "Highest First" facing three opponents.
+   - **Win Rate Variability:** When competing against three other "Highest First" players, the win rate is predictably 1/4. Against all but one of the other mixes, "Highest First" consistently wins more than 1/4 of the games, with win rates ranging from 0.2 to 0.5. It performs best against the "Random+Lowest+Midrange" combination and 3x Random. The only combination where it performs below the 1/4 threshold is against 3x Lowest, warranting further analysis to understand this anomaly.
 
-#### 6.2 Visualization
+4. **Multiple Winners:**
+   - **Frequency of Multiple Winners:** When analyzing the count of games with multiple winners, the scenario of playing against 3x "Highest First" results in the highest number of multiple winners. This outcome is expected, as identical strategies tend to perform similarly, increasing the likelihood of matching scores at the end of the game.
 
-- Use plots to visualize performance metrics.
-- Create heatmaps or other visual aids to show strategy effectiveness in different environments.
+## Future Work
 
-### 7. Optimization and Further Exploration
+Future enhancements could include:
 
 - **Parameter Tuning**: Optimize strategies for better performance.
 - **Hybrid Strategies**: Combine different strategies for improved results.
 - **Machine Learning**: Explore using machine learning to develop adaptive strategies.
+- **Testing more environments**: Create heatmaps or other visual aids to show strategy effectiveness in different environments.
